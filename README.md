@@ -1,128 +1,58 @@
-# Tic Tac Toe — Calm Edition
+# 🎮 EX TIC TAC TOE AI
 
-A clean, eye-friendly Tic Tac Toe game built with pure HTML, CSS, and JavaScript. No frameworks, no dependencies, no build step — just open the file and play.
+An unbeatable Tic Tac Toe game with a Minimax AI opponent. Built with pure HTML, CSS & JavaScript — no dependencies, no build step.
 
-![Tic Tac Toe Preview](https://img.shields.io/badge/status-ready%20to%20play-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue) ![HTML](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white) ![CSS](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
-
----
+![Status](https://img.shields.io/badge/status-ready%20to%20play-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
 ## ✨ Features
 
-- 🎮 **Classic 3×3 Tic Tac Toe** — two players, X starts first
-- 👁️ **Easy on the eyes** — soft muted palette, gentle shadows, no harsh glows
-- 📱 **Fully responsive** — works on desktop, tablet, and mobile
-- 🏆 **Win detection** — highlights the winning line with a soft golden glow
-- 🤝 **Draw detection** — announces a tie when the board is full
-- 🔄 **One-click reset** — start a new game instantly
-- ⚡ **Zero dependencies** — no frameworks, no libraries, no build tools
-- 🎨 **Pure HTML/CSS/JS** — a single file you can open in any browser
-
----
+- 🤖 **Minimax AI** — unbeatable in Impossible mode
+- 🎯 **3 difficulty levels** — Easy, Medium, Impossible
+- 🎨 **Soft, eye-friendly design** — same style as EX BALL
+- 📱 **Fully responsive** — works on phone and desktop
+- ⚡ **Zero dependencies** — single HTML file
+- 🔄 **One-click reset**
 
 ## 🚀 How to Use
 
-**Anyone can use it — no coding required!**
-
-1. **Download** the `index.html` file (or copy the code from this repo).
-2. **Open** it in any modern browser (Chrome, Firefox, Safari, Edge).
-3. **Play!** Click any empty cell to place your mark.
-
-That's it. No installation, no npm, no setup.
-
-### Optional: Clone the repo
-
-```bash
-git clone https://github.com/your-username/tic-tac-toe-calm.git
-cd tic-tac-toe-calm
-```
-
-Then just open `index.html` in your browser.
-
----
+1. Download `index.html`
+2. Open in any browser
+3. Play!
 
 ## 🎯 How to Play
 
-| Step | Action |
-|------|--------|
-| 1 | The game starts with **X** |
-| 2 | Click any empty cell to place your mark |
-| 3 | Players alternate turns: **X → O → X → O …** |
-| 4 | First to get **3 in a row** (horizontal, vertical, or diagonal) **wins** |
-| 5 | If all 9 cells fill with no winner, it's a **draw** |
-| 6 | Click **"New Game"** to reset and play again |
+- You are **X**, AI is **O**
+- Click any empty cell to place your mark
+- First to get 3 in a row wins
+- Choose difficulty:
+  - **Easy** — AI plays randomly
+  - **Medium** — AI plays 60% optimal
+  - **Impossible** — AI never loses
 
----
+## 🧠 How the AI Works
 
-## 🎨 Customization
-
-Want to tweak the look? The CSS is well-commented and easy to change:
-
-- **Colors:** Update the hex values in the `.cell.x-move`, `.cell.o-move`, and `.cell.win` classes.
-- **Board size:** Adjust the `max-width` on `.game-container`.
-- **Font sizes:** Change the `font-size` in `.cell`.
-- **Background:** Modify the `background` on `body`.
-
-No JavaScript changes needed for most visual tweaks.
-
----
-
-## 🧠 How It Works (For Curious Minds)
-
-The game logic lives in a single IIFE (Immediately Invoked Function Expression):
-
-- **State:** A `board` array of 9 cells, `currentPlayer`, `gameActive`, and `winnerInfo`.
-- **Render:** `renderBoard()` rebuilds the grid on every move.
-- **Win check:** After each move, `checkGameState()` loops through 8 winning patterns.
-- **Click handler:** Validates the move, updates state, re-renders, and switches players.
-
-Clean, readable, and beginner-friendly — perfect for learning or forking.
-
----
-
-## 📁 File Structure
-
-```
-tic-tac-toe-calm/
-└── index.html    ← Everything: HTML + CSS + JS in one file
-```
-
----
-
-## 🌐 Browser Support
-
-| Browser | Supported |
-|---------|-----------|
-| Chrome  | ✅ Yes |
-| Firefox | ✅ Yes |
-| Safari  | ✅ Yes |
-| Edge    | ✅ Yes |
-| Opera   | ✅ Yes |
-
-Requires a modern browser with support for `backdrop-filter` (all current browsers have it).
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to:
-
-- 🐛 Report bugs via [Issues](https://github.com/your-username/tic-tac-toe-calm/issues)
-- 💡 Suggest features
-- 🎨 Submit design improvements
-- 🔧 Open a Pull Request
-
-Please keep the code dependency-free and the design calm and accessible.
-
----
+The AI uses the **Minimax algorithm** with depth-based scoring:
+- Winning move = +10
+- Losing move = -10
+- Draw = 0
+- Deeper wins are penalized (encourages faster wins)
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — free to use, modify, and share for personal or commercial projects.
+MIT — free to use, modify, and share.
 
-```
+## 🎮 Part of the EX BALL Series
+
+- EX BALL (Tic Tac Toe — Calm Edition)
+- **EX TIC TAC TOE AI** ← you are here
+- EX MERGE (coming soon)
+- EX SNAKE AI (coming soon)
+📄 LICENSE (MIT)
+text
 MIT License
 
-Copyright (c) 2026
+Copyright (c) 2026 Mahadevs Official
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -134,15 +64,51 @@ furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
-```
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+🚀 Quick Start
+bash
+# 1. Create the repo on GitHub
+# Name: ex-tic-tac-toe-ai
+# Description: 🎮 Unbeatable Tic Tac Toe with Minimax AI. Pure HTML/CSS/JS, zero dependencies.
 
----
+# 2. Clone it
+git clone https://github.com/mahadevsofficial/ex-tic-tac-toe-ai.git
+cd ex-tic-tac-toe-ai
 
-## ⭐ Show Your Support
+# 3. Add the files above (index.html, README.md, LICENSE)
+# 4. Commit and push
+git add .
+git commit -m "EX TIC TAC TOE AI — unbeatable minimax AI"
+git push origin main
 
-If you find this useful, give it a ⭐ on GitHub — it helps others discover the project!
+# 5. Enable GitHub Pages
+# Settings → Pages → main → / (root) → Save
+Live URL: https://mahadevsofficial.github.io/ex-tic-tac-toe-ai/
 
----
+🎯 What Makes This Different from EX BALL
+Feature	EX BALL	EX TIC TAC TOE AI
+Opponent	Human vs Human	Human vs AI
+AI	❌ None	✅ Minimax (unbeatable)
+Difficulty	❌ Single	✅ 3 levels
+Algorithm	Basic rules	Minimax + depth scoring
+Theme	Calm	AI Edition (blue accent)
+🎮 PLAY IT NOW
+Once you upload it to GitHub Pages, share this:
 
-**Made with ❤️ for anyone who wants a simple, calm, and accessible game.**
+text
+🤖 EX TIC TAC TOE AI — can you beat the unbeatable AI?
+
+Three difficulty levels:
+🟢 Easy — AI plays random
+🟡 Medium — AI plays smart
+🔴 Impossible — AI never loses
+
+Play: https://mahadevsofficial.github.io/ex-tic-tac-toe-ai/
+
+#EXBALL #AI #TicTacToe #JavaScript #OpenSource
