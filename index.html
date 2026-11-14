@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            background: #eef2f5; /* soft muted background */
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Very subtle background accents – no harsh glows */
+        body::before {
+            content: "";
+            position: absolute;
+            top: -15%;
+            left: -10%;
+            width: 55%;
+            height: 75%;
+            background: radial-gradient(circle, rgba(200, 215, 230, 0.45), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            bottom: -15%;
+            right: -10%;
+            width: 55%;
+            height: 75%;
+            background: radial-gradient(circle, rgba(210, 220, 235, 0.45), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .game-container {
+            background: rgba(252, 252, 253, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 2.8rem;
+            padding: 2.2rem 2.2rem 2.4rem;
+            box-shadow: 
+                0 20px 40px -18px rgba(60, 70, 90, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.9),
+                inset 0 1px 2px rgba(255, 255, 255, 0.9);
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        /* Simplified header – just a soft line, no author */
+        .header-line {
+            font-size: 1.2rem;
+            letter-spacing: 0.35rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            color: #7d8a99;
+            margin-bottom: 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            width: 100%;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(170, 185, 200, 0.3);
+        }
+
+        .header-line span {
+            font-size: 1.3rem;
+            opacity: 0.7;
+        }
+
+        .status-area {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #4e5a68;
+            margin-bottom: 1.5rem;
+            padding: 0.6rem 2rem;
+            background: rgba(240, 244, 248, 0.7);
+            border-radius: 60px;
+            border: 1px solid rgba(180, 195, 210, 0.4);
+            box-shadow: 
+                inset 0 2px 4px rgba(0, 0, 0, 0.02),
+                0 4px 10px rgba(0, 0, 0, 0.02);
+            min-height: 3.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            transition: all 0.25s ease;
+            letter-spacing: 0.02rem;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            margin-bottom: 1.8rem;
+            padding: 5px;
+            background: rgba(230, 237, 242, 0.5);
+            border-radius: 1.8rem;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .cell {
+            background: #ffffff;
+            border-radius: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 
+                0 4px 0 #d5dce2,
+                0 6px 14px -5px rgba(0, 0, 0, 0.06),
+                inset 0 1px 2px rgba(255, 255, 255, 0.9);
+            transition: all 0.08s ease-in-out;
+            color: #3a4a5a;
+            user-select: none;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            aspect-ratio: 1 / 1;
+            line-height: 1;
+            transform: translateY(0);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        /* Hover – subtle lift, no bright flash */
+        .cell:hover {
+            background: #fcfdff;
+            box-shadow: 
+                0 3px 0 #d5dce2,
+                0 8px 16px -6px rgba(0, 0, 0, 0.08),
+                inset 0 1px 3px rgba(255, 255, 255, 1);
+            transform: translateY(-1px);
+        }
+
+        .cell:active {
+            transform: translateY(3px);
+            box-shadow: 
+                0 1px 0 #d5dce2,
+                0 4px 8px -3px rgba(0, 0, 0, 0.06),
+                inset 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        /* X – calm, muted blue */
+        .cell.x-move {
+            color: #5b8cbf;
+            text-shadow: 0 1px 8px rgba(91, 140, 191, 0.15);
+        }
+
+        /* O – soft, dusty rose */
+        .cell.o-move {
+            color: #c97b63;
+            text-shadow: 0 1px 8px rgba(201, 123, 99, 0.15);
+        }
+
+        /* Winning cells – gentle highlight, no intense glow */
+        .cell.win {
+            background: #f7f5ef;
+            box-shadow: 
+                0 0 0 3px rgba(200, 190, 150, 0.45),
+                0 0 18px rgba(210, 195, 140, 0.2),
+                0 4px 0 #d5dce2,
+                inset 0 0 16px rgba(235, 225, 190, 0.35);
+            color: #9b8a5a;
+            text-shadow: 0 0 12px rgba(200, 185, 130, 0.35);
+            transition: all 0.2s ease;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1.2rem;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: #ffffff;
+            border: 1px solid rgba(180, 195, 210, 0.5);
+            border-radius: 60px;
+            padding: 0.9rem 2rem;
+            font-size: 1.05rem;
+            font-weight: 500;
+            letter-spacing: 0.03rem;
+            color: #5f6c7a;
+            box-shadow: 
+                0 4px 0 #d5dce2,
+                0 6px 14px -5px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            transition: all 0.08s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            min-width: 145px;
+            transform: translateY(0);
+            backdrop-filter: blur(4px);
+        }
+
+        .btn:hover {
+            background: #f9fbfd;
+            border-color: rgba(160, 180, 200, 0.7);
+            color: #4a5664;
+            box-shadow: 
+                0 3px 0 #d5dce2,
+                0 8px 18px -6px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(3px);
+            box-shadow: 
+                0 1px 0 #d5dce2,
+                0 4px 10px -4px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn.reset {
+            background: #f6f8fa;
+            color: #6a7a88;
+            border-color: rgba(180, 195, 210, 0.6);
+            box-shadow: 
+                0 4px 0 #d0d8e0,
+                0 6px 14px -5px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn.reset:hover {
+            background: #fbfdfe;
+            box-shadow: 
+                0 3px 0 #d0d8e0,
+                0 8px 18px -6px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn.reset:active {
+            box-shadow: 
+                0 1px 0 #d0d8e0,
+                0 4px 10px -4px rgba(0, 0, 0, 0.06);
+        }
+
+        .footer-note {
+            margin-top: 1.6rem;
+            font-size: 0.65rem;
+            color: #b2bcc6;
+            letter-spacing: 0.12rem;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        /* small screens */
+        @media (max-width: 420px) {
+            .game-container { padding: 1.5rem; }
+            .cell { font-size: 3.4rem; border-radius: 1rem; }
+            .board { gap: 9px; padding: 4px; }
+            .status-area { font-size: 1.15rem; min-height: 3.4rem; }
+            .header-line { font-size: 1rem; letter-spacing: 0.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Simple, unbranded header line -->
+        <div class="header-line">
+            <span>●</span> TIC TAC TOE <span>●</span>
+        </div>
+
+        <!-- Game status -->
+        <div class="status-area" id="statusMessage">Your turn, X</div>
+
+        <!-- 3x3 board (cells generated by JS) -->
+        <div class="board" id="board"></div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn reset" id="resetButton">⟳ New Game</button>
+        </div>
+        <div class="footer-note">a calm game</div>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- Game state ----------
+            let board = Array(9).fill('');
+            let currentPlayer = 'X';        // X always starts
+            let gameActive = true;
+            let winnerInfo = null;          // { winner: 'X'|'O'|'draw' }
+            let winCombo = null;            // array of 3 indices if win
+
+            // DOM elements
+            const boardEl = document.getElementById('board');
+            const statusEl = document.getElementById('statusMessage');
+            const resetBtn = document.getElementById('resetButton');
+
+            // Winning combinations
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+                [0, 4, 8], [2, 4, 6]             // diagonals
+            ];
+
+            // ---------- Render the board ----------
+            function renderBoard() {
+                boardEl.innerHTML = '';
+
+                for (let i = 0; i < 9; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+
+                    const value = board[i];
+                    if (value) {
+                        cell.textContent = value;
+                        if (value === 'X') {
+                            cell.classList.add('x-move');
+                        } else if (value === 'O') {
+                            cell.classList.add('o-move');
+                        }
+                    }
+
+                    // highlight winning cells
+                    if (winCombo && winCombo.includes(i)) {
+                        cell.classList.add('win');
+                    }
+
+                    cell.dataset.index = i;
+                    cell.addEventListener('click', () => handleCellClick(i));
+
+                    boardEl.appendChild(cell);
+                }
+            }
+
+            // ---------- Update status message ----------
+            function updateStatus() {
+                if (winnerInfo) {
+                    if (winnerInfo.winner === 'draw') {
+                        statusEl.textContent = `🤝 It's a draw!`;
+                    } else if (winnerInfo.winner === 'X' || winnerInfo.winner === 'O') {
+                        statusEl.textContent = `✨ ${winnerInfo.winner} wins! ✨`;
+                    }
+                } else if (gameActive) {
+                    statusEl.textContent = `Your turn, ${currentPlayer}`;
+                } else {
+                    statusEl.textContent = `Game over`;
+                }
+            }
+
+            // ---------- Check for winner / draw ----------
+            function checkGameState() {
+                for (const pattern of winPatterns) {
+                    const [a, b, c] = pattern;
+                    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                        winnerInfo = { winner: board[a] };
+                        winCombo = pattern;
+                        gameActive = false;
+                        return;
+                    }
+                }
+
+                if (board.every(cell => cell !== '')) {
+                    winnerInfo = { winner: 'draw' };
+                    winCombo = null;
+                    gameActive = false;
+                    return;
+                }
+
+                winnerInfo = null;
+                winCombo = null;
+                gameActive = true;
+            }
+
+            // ---------- Handle cell click ----------
+            function handleCellClick(index) {
+                if (!gameActive || board[index] !== '' || winnerInfo) return;
+
+                board[index] = currentPlayer;
+                checkGameState();
+
+                if (gameActive && !winnerInfo) {
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                }
+
+                renderBoard();
+                updateStatus();
+            }
+
+            // ---------- Reset the game ----------
+            function resetGame() {
+                board = Array(9).fill('');
+                currentPlayer = 'X';
+                gameActive = true;
+                winnerInfo = null;
+                winCombo = null;
+
+                renderBoard();
+                updateStatus();
+            }
+
+            // ---------- Initialize the game ----------
+            function initGame() {
+                resetGame();
+                resetBtn.addEventListener('click', resetGame);
+            }
+
+            // Start the game
+            initGame();
+        })();
+    </script>
+</body>
+</html>
